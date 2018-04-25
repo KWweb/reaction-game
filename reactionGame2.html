@@ -1,0 +1,235 @@
+<html>
+    <head>
+        
+        <style type="text/css">
+            
+            body {
+                text-align: center;
+                font-family: helvetica, arial, sans-serif;
+                color: #484848;
+                background-color: #f5f5f5;
+            }
+
+            .gameArea {
+                max-width: 100%;
+                height: 500px;
+                padding: 0;
+                border: 1px solid #484848;
+                background-color: white;
+            }
+            
+            #shape {
+                height: 200px;
+                width: 200px; 
+                background-color: red;
+                display: none;
+            }
+            
+            button {
+                border-radius: 10px;
+                border: 1px #484848 solid;
+                padding: 4px 15px;
+                color: #f5f5f5;
+                background-color: #484848;
+                font-size: 1.17em;
+                margin-bottom: 10px;
+
+            }           
+            
+            #reset, #playAgain {
+                display: none;
+            }  
+            
+            #playAgain {
+                color: #484848;
+                background-color: white;
+                font-weight: bold;
+                border: 0px;
+                
+            }
+            
+            h3 {
+                color: white;
+            }
+
+        </style>
+        
+    </head>
+    
+    <body id="image">
+        
+        <h1>Test Your Reactions!</h1>
+
+        <p id="explain">Click on the boxes and circles as quickly as you can!</p>
+
+        <h3 id="recordScore"></h3>
+        
+        <h3 id="bestScore"></h3>
+        
+        <h3 id="averageResult"></h3>
+        
+        <button id="reset" type="button">Reset</button>
+        
+        <button id="playAgain" type="button">Play Again</button> 
+        
+        <button id="playNow" type="button">Play Now</button> 
+
+        <div class="gameArea">
+
+            <div id="shape"></div>
+
+        </div>
+    
+        <script type="text/javascript">
+            
+            var y = ""
+            
+            function random_hex() {
+                
+                return ("#" + Math.floor(Math.random()*16777210).toString(16))
+                
+            }
+            
+            function shape() {
+                
+                var x = Math.floor(Math.random()*2);
+                
+                if (x == 1) {
+                    
+                     return("50%") 
+                    
+                } else {
+                    
+                    return("0%")
+                    
+                }
+            }
+                        
+            var start = new Date().getTime();
+            
+            var AverageTime = [];
+            
+            var RecordTime = [];
+                        
+            function shapeAppear() {
+                
+                    if (AverageTime.length < 10) {
+
+                    setTimeout(function() {
+
+                    start = new Date().getTime();
+
+                    document.getElementById("shape").style.backgroundColor = (random_hex(y));
+
+                    document.getElementById("shape").style.borderRadius = (shape(y));
+
+                    var z = Math.floor(Math.random()*150) + 10;
+                        
+                    document.getElementById("shape").style.height = z;
+                        
+                    document.getElementById("shape").style.width = z;
+
+                    var q = (Math.floor(Math.random()*75)) + "%";
+                        
+                    document.getElementById("shape").style.marginLeft = q;
+
+                    var r =Math.floor(Math.random()*350);
+                        
+                    document.getElementById("shape").style.marginTop = r;  
+                        
+                    document.getElementById("shape").style.display = "block";
+                                    
+                }, 0); 
+                        
+                } else {
+                    
+                    var sum = AverageTime.reduce(function(a, b) { return a + b; });
+
+                    var Result = (sum / AverageTime.length).toFixed(3); 
+
+                    var minimum = Math.min.apply(null, AverageTime);
+
+                    var bestMin = Math.min.apply(null, RecordTime);
+                    
+                    Object.assign(image.style,{color:"white",backgroundImage:"url('https://cdn.pixabay.com/photo/2014/12/21/07/49/fireworks-574739_960_720.jpg')"})
+
+                    document.getElementById("recordScore").innerHTML = "All time quickest click: " + bestMin + "s";
+
+                    document.getElementById("bestScore").innerHTML = "Quickest click this time: " + minimum + "s";
+
+                    document.getElementById("averageResult").innerHTML = "Average click speed this time: " + Result + "s";
+
+                    document.getElementById("playAgain").style.display = "unset";
+
+                    document.getElementById("reset").style.display = "none";
+                    
+                    document.getElementById("explain").style.display = "none";
+
+                    scroll(0,0);
+                    
+                }
+            }     
+           
+            document.getElementById("playNow").onclick = function() {
+                
+                shapeAppear();
+                
+                document.getElementById("playNow").style.display = "none";
+                
+                document.getElementById("reset").style.display = "unset";
+                
+            }
+            
+            document.getElementById("shape").onclick = function() {
+                
+                document.getElementById("shape").style.display = "none";
+                
+                var end = new Date().getTime();
+                
+                var time = (end - start) / 1000;
+                
+                AverageTime.push(time);
+                
+                RecordTime.push(time);
+                
+                shapeAppear();
+                
+            }
+            
+            document.getElementById("reset").onclick = function() {
+                
+                AverageTime = [];
+                
+                document.getElementById("shape").style.display = "none";
+                
+                document.getElementById("reset").style.display = "none";
+                
+                document.getElementById("playAgain").style.display = "unset";
+
+            }
+            
+            document.getElementById("playAgain").onclick = function() {
+                
+                AverageTime = [];
+                
+                Object.assign(image.style,{color:"#484848",backgroundImage:"none"})
+                
+                document.getElementById("averageResult").innerHTML = "";
+                
+                document.getElementById("bestScore").innerHTML = "";
+                
+                document.getElementById("recordScore").innerHTML = "";
+                
+                document.getElementById("reset").style.display = "unset";
+                
+                document.getElementById("explain").style.display = "unset";
+                
+                document.getElementById("playAgain").style.display = "none";
+                
+                shapeAppear()
+                
+            }
+
+        </script>    
+    </body>
+</html>
